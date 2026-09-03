@@ -1,0 +1,4 @@
+1|Rice Bags|120|bags|Central Warehouse, Kathmandu
+2|Drinking Water|300|bottles|Central Warehouse, Kathmandu
+3|First Aid Kits|45|kits|Bir Hospital Store
+4|Blankets|80|pieces|Central Warehouse, Kathmandu

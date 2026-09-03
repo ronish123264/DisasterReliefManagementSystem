@@ -1,0 +1,2 @@
+1|Nabil Bank|Money|-|250000.0|2026-09-03
+2|Sita Sharma|Supplies|20 blankets|0.0|2026-09-03

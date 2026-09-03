@@ -1,0 +1,3 @@
+1|Flood|Saptari|High|2026-09-03|Koshi river overflowed into nearby villages.|Ongoing|Sita Sharma
+2|Earthquake|kathmandu municipality|Critical|2026-09-03|the eyeplex mall has collapsed suddenly and there are almost 1000 people inside unable to contact|Reported|ronish bohora
+3|Earthquake|gorkha|Critical|2026-09-03|earthquake took 40 people in the building|Reported|ronish bohora

@@ -1,0 +1,2 @@
+1|Bhaktapur College Shelter|Bhaktapur|200|85|9801000001
+2|Saptari Community Hall|Saptari|150|150|9801000002

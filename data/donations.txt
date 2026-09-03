@@ -1,0 +1,4 @@
+1|Nabil Bank|Money|-|250000.0|2026-09-03
+2|Sita Sharma|Supplies|20 blankets|0.0|2026-09-03
+3|ronish bohora|Money|-|9000000.0|2026-09-03
+4|ronish bohora|Supplies|30 cartoon noodles|0.0|2026-09-03

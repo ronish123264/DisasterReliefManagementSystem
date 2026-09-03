@@ -1,0 +1,5 @@
+ADMIN|admin|admin123|System Admin|9800000001
+MUNICIPALITY|municipality|muni123|Kathmandu Municipality|9800000002|Kathmandu
+VOLUNTEER|ramvol|ram123|Ram Bahadur|9800000003|First Aid, Rescue Driving|Available
+CITIZEN|sita|sita123|Sita Sharma|9800000004|Bhaktapur
+CITIZEN|ronish|ronish123|ronish bohora|980101010|new baneshwor
