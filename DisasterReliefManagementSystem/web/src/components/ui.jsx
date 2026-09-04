@@ -45,13 +45,20 @@ export function Tag({ status }) {
 const BTN_BASE =
   "inline-flex items-center justify-center gap-1.5 rounded-md font-semibold " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
-  "transition-colors active:translate-y-px whitespace-nowrap cursor-pointer";
+  "transition-[background-color,border-color,transform,box-shadow] duration-150 " +
+  "active:translate-y-px active:scale-[0.99] whitespace-nowrap cursor-pointer";
 
 const BTN_VARIANTS = {
-  solid: "bg-accent text-[#fdfdfb] border border-accent-deep hover:bg-accent-deep",
-  ink: "bg-ink text-[#fbfbf9] border border-ink hover:bg-[#0b0c0d]",
-  line: "bg-transparent text-ink border border-line-strong hover:border-muted",
-  ghost: "bg-transparent text-ink-soft border border-transparent hover:bg-surface-2 hover:text-ink",
+  solid:
+    "bg-accent text-[#fdfdfb] border border-accent-deep shadow-[0_1px_2px_rgba(138,28,38,0.35)] " +
+    "hover:bg-accent-deep hover:shadow-[0_3px_10px_rgba(138,28,38,0.35)] hover:-translate-y-px",
+  ink:
+    "bg-ink text-[#fbfbf9] border border-ink shadow-[0_1px_2px_rgba(27,29,31,0.3)] " +
+    "hover:bg-[#0b0c0d] hover:shadow-[0_3px_10px_rgba(27,29,31,0.3)] hover:-translate-y-px",
+  line:
+    "bg-transparent text-ink border border-line-strong hover:border-muted hover:bg-surface-2 hover:-translate-y-px",
+  ghost:
+    "bg-transparent text-ink-soft border border-transparent hover:bg-surface-2 hover:text-ink",
 };
 
 const BTN_SIZES = {

@@ -1,7 +1,22 @@
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useReducedMotion, useTransform } from "motion/react";
 import { ArrowRight, ArrowsClockwise, Megaphone } from "@phosphor-icons/react";
 import { useApp } from "../context/AppContext.jsx";
 import { btn, Reveal, CountUp, Stagger, StaggerItem, LiveDot } from "../components/ui.jsx";
+
+function Figure({ label, value, live = false }) {
+  return (
+    <div className="flex items-baseline justify-between gap-4 border-b border-line py-3.5">
+      <dt className="flex items-center gap-2 text-sm text-ink-soft">
+        {live && <LiveDot />}
+        {label}
+      </dt>
+      <dd className="text-right font-mono text-[22px] leading-none font-medium tracking-tight">
+        <CountUp value={value} />
+      </dd>
+    </div>
+  );
+}
 
 const ROLES = [
   ["Admin", "Full control: shelters, stock, approvals, accounts and the summary report."],
@@ -24,16 +39,36 @@ const PERILS = [
   ["Forest fire", "Fire alerts with volunteer call-out and medical supply requests for nearby settlements."],
 ];
 
-function Figure({ label, value, live = false }) {
+function HeroImage({ src, alt }) {
+  const reduce = useReducedMotion();
+  const ref = useRef(null);
+
+  // Gentle parallax: the image drifts a few px against scroll.
+  // Motion value only, no React state per frame.
+  const y = useMotionValue(0);
+  const yTransform = useTransform(y, [-200, 400], [8, -8]);
+  useEffect(() => {
+    if (reduce) return;
+    function onScroll() {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      y.set(rect.top);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [reduce, y]);
+
   return (
-    <div className="flex items-baseline justify-between gap-4 border-b border-line py-3.5">
-      <dt className="flex items-center gap-2 text-sm text-ink-soft">
-        {live && <LiveDot />}
-        {label}
-      </dt>
-      <dd className="text-right font-mono text-[22px] leading-none font-medium tracking-tight">
-        <CountUp value={value} />
-      </dd>
+    <div ref={ref} className="relative overflow-hidden rounded-md border border-line">
+      <motion.img
+        src={src}
+        alt={alt}
+        style={reduce ? undefined : { y: yTransform }}
+        className="h-full w-full scale-[1.06] object-cover grayscale-[35%]"
+        loading="eager"
+      />
     </div>
   );
 }
@@ -61,42 +96,78 @@ export default function Overview() {
     <div>
       {/* masthead */}
       <div className="grid items-start gap-12 pt-14 pb-12 lg:grid-cols-[1.35fr_1fr]">
-        <div>
-          <p className="mb-3 text-[13px] font-semibold text-muted">
-            Earthquake, flood, landslide and forest fire response across Nepal
-          </p>
-          <h1 className="mb-4 max-w-[17ch] text-[clamp(30px,4.2vw,46px)] leading-[1.08] font-bold tracking-[-0.025em]">
-            Know what is hit, what is held, and what is still needed.
-          </h1>
-          <p className="mb-6 max-w-[54ch] text-ink-soft">
-            DRMS keeps one record of affected areas, shelter capacity, supplies, volunteers,
-            relief requests and missing persons, shared between the municipality, its
-            volunteers and the public.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <button className={btn("solid")} onClick={() => showSection("requests")}>
-              Open relief queue
-              <ArrowRight size={15} weight="bold" aria-hidden="true" />
-            </button>
-            <button className={btn("line")} onClick={() => showSection(user ? "disasters" : "login")}>
-              {user ? "View active disasters" : "Log in"}
-            </button>
+        {reduce ? (
+          <div>
+            <p className="mb-3 text-[13px] font-semibold text-muted">
+              Earthquake, flood, landslide and forest fire response across Nepal
+            </p>
+            <h1 className="mb-4 max-w-[17ch] text-[clamp(30px,4.2vw,46px)] leading-[1.08] font-bold tracking-[-0.025em]">
+              Know what is hit, what is held, and what is still needed.
+            </h1>
+            <p className="mb-6 max-w-[54ch] text-ink-soft">
+              DRMS keeps one record of affected areas, shelter capacity, supplies, volunteers,
+              relief requests and missing persons, shared between the municipality, its
+              volunteers and the public.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <button className={btn("solid")} onClick={() => showSection("requests")}>
+                Open relief queue
+                <ArrowRight size={15} weight="bold" aria-hidden="true" />
+              </button>
+              <button className={btn("line")} onClick={() => showSection(user ? "disasters" : "login")}>
+                {user ? "View active disasters" : "Log in"}
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09 } } }}
+          >
+            <motion.p
+              variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } } }}
+              className="mb-3 text-[13px] font-semibold text-muted"
+            >
+              Earthquake, flood, landslide and forest fire response across Nepal
+            </motion.p>
+            <motion.h1
+              variants={{ hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } } }}
+              className="mb-4 max-w-[17ch] text-[clamp(30px,4.2vw,46px)] leading-[1.08] font-bold tracking-[-0.025em]"
+            >
+              Know what is hit, what is held, and what is still needed.
+            </motion.h1>
+            <motion.p
+              variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } } }}
+              className="mb-6 max-w-[54ch] text-ink-soft"
+            >
+              DRMS keeps one record of affected areas, shelter capacity, supplies, volunteers,
+              relief requests and missing persons, shared between the municipality, its
+              volunteers and the public.
+            </motion.p>
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } } }}
+              className="flex flex-wrap gap-3"
+            >
+              <button className={btn("solid")} onClick={() => showSection("requests")}>
+                Open relief queue
+                <ArrowRight size={15} weight="bold" aria-hidden="true" />
+              </button>
+              <button className={btn("line")} onClick={() => showSection(user ? "disasters" : "login")}>
+                {user ? "View active disasters" : "Log in"}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
 
         {/* right column: image over figures, no fake dashboard */}
         <div>
-          {!reduce ? (
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="mb-6 aspect-16/10">{heroImg}</div>
-            </motion.div>
-          ) : (
-            <div className="mb-6 aspect-16/10">{heroImg}</div>
-          )}
+          <div className="mb-6 aspect-16/10">
+            <HeroImage
+              src="https://picsum.photos/seed/nepal-relief-convoy-mountain/900/640"
+              alt="Relief convoy on a mountain road in Nepal"
+            />
+          </div>
           <dl className="border-t border-line-strong">
             <Figure label="Active disasters" value={db.disasters.filter((d) => d.status !== "Resolved").length} live />
             <Figure label="Open requests" value={openRequests} />

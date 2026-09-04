@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { loadDB, loadSession, saveDB, storeSession, nextId, today } from "../lib/db.js";
 
 const AppContext = createContext(null);
@@ -7,11 +7,31 @@ export function useApp() {
   return useContext(AppContext);
 }
 
+function initialTheme() {
+  try {
+    const stored = localStorage.getItem("drms_theme");
+    if (stored) return stored;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  } catch {
+    return "light";
+  }
+}
+
 export function AppProvider({ children }) {
   const [db, setDbState] = useState(() => loadDB());
   const [user, setUser] = useState(() => loadSession(db.users));
   const [section, setSection] = useState("home");
   const [toast, setToast] = useState({ id: 0, text: "" });
+  const [theme, setTheme] = useState(initialTheme);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("drms_theme", theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((t) => (t === "dark" ? "light" : "dark"));
+  }, []);
 
   const setDb = useCallback((updater) => {
     setDbState((prev) => {
@@ -159,6 +179,8 @@ export function AppProvider({ children }) {
     user,
     section,
     toast,
+    theme,
+    toggleTheme,
     showSection,
     showToast,
     login,

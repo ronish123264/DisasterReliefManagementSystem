@@ -25,6 +25,7 @@
   --color-accent: #a4222d;
   --color-accent-deep: #8a1c26;
   --color-accent-tint: #f5e7e8;
+  --color-input: #ffffff;
 
   --color-st-warn: #7d5a00;
   --color-st-warn-bg: #f6efdd;
@@ -38,6 +39,34 @@
   --color-st-neutral-bg: #ececeb;
 }
 
+/* Dark mode: same accent, lifted surfaces. Both modes are
+   first-class (design system: dual-mode by default). */
+.dark {
+  --color-paper: #131416;
+  --color-surface: #1a1c1e;
+  --color-surface-2: #222427;
+  --color-ink: #ececea;
+  --color-ink-soft: #b4b8ba;
+  --color-muted: #8d9296;
+  --color-line: #2b2d30;
+  --color-line-strong: #3a3d40;
+  --color-accent: #e0525e;
+  --color-accent-deep: #c73f4b;
+  --color-accent-tint: #3a2226;
+  --color-input: #232527;
+
+  --color-st-warn: #d9b45c;
+  --color-st-warn-bg: #2e2819;
+  --color-st-ok: #7cc08d;
+  --color-st-ok-bg: #1d2b21;
+  --color-st-info: #82a9d0;
+  --color-st-info-bg: #1e2833;
+  --color-st-bad: #e0525e;
+  --color-st-bad-bg: #3a2226;
+  --color-st-neutral: #a0a5a9;
+  --color-st-neutral-bg: #26282b;
+}
+
 body {
   background: var(--color-paper);
   color: var(--color-ink);
@@ -49,4 +78,26 @@ body {
 ::selection {
   background: var(--color-accent-tint);
   color: var(--color-accent-deep);
+}
+
+/* Images darken slightly in dark mode instead of glowing */
+.dark img {
+  filter: brightness(0.82) saturate(0.9);
+}
+
+/* Incident ticker: one continuous marquee. Static under
+   prefers-reduced-motion (IncidentTicker handles that in JS). */
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.motion-safe .animate-ticker {
+  animation: ticker-scroll 46s linear infinite;
+}
+
+/* Plain class (outside motion-safe) so hover pause still works in
+   reduced-motion mode's interactive fallback */
+.group:hover .animate-ticker {
+  animation-play-state: paused;
 }

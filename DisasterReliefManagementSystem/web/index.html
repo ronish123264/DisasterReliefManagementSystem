@@ -8,6 +8,19 @@
       name="description"
       content="Shared record of disasters, shelters, supplies, volunteers and relief requests for Nepal disaster response."
     />
+    <script>
+      // Apply the stored theme before first paint to avoid a flash
+      // of the wrong mode. Default follows the system preference.
+      (function () {
+        try {
+          var stored = localStorage.getItem("drms_theme");
+          var dark = stored
+            ? stored === "dark"
+            : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (dark) document.documentElement.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
