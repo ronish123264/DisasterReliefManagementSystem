@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { House } from "@phosphor-icons/react";
+import { HouseLine } from "@phosphor-icons/react";
 import { useApp } from "../context/AppContext.jsx";
 import PageHead from "../components/PageHead.jsx";
 import GatePanel from "../components/GatePanel.jsx";
 import { Panel, Field, inputCls, Button, EmptyState, Reveal } from "../components/ui.jsx";
+import { Meter, Stagger, StaggerItem } from "../components/motion.jsx";
 import { Table, Td, IdCell, Row } from "../components/table.jsx";
 
 function AddShelterForm() {
@@ -60,17 +61,31 @@ export default function Shelters() {
       <PageHead title="Shelters" sub="Capacity, occupancy and free space for every registered shelter." />
 
       <Reveal>
+        <Stagger>
+          <StaggerItem className="grid gap-5 sm:grid-cols-3">
+            {[
+              ["Shelters open", db.shelters.length],
+              ["People sheltered", db.shelters.reduce((n, s) => n + s.occupied, 0)],
+              ["Places free", db.shelters.reduce((n, s) => n + (s.capacity - s.occupied), 0)],
+            ].map(([label, value]) => (
+              <div key={label} className="border-b border-line pb-3">
+                <p className="text-sm text-ink-soft">{label}</p>
+                <p className="mt-1 font-mono text-[26px] leading-none font-medium tracking-tight">{value}</p>
+              </div>
+            ))}
+          </StaggerItem>
+        </Stagger>
         <Panel
           title="All shelters"
           meta={`${db.shelters.length} shelters · ${totalFree} places free${atCapacity ? `, ${atCapacity} at capacity` : ""}`}
         >
           {db.shelters.length === 0 ? (
-            <EmptyState icon={House} title="No shelters registered"
+            <EmptyState icon={HouseLine} title="No shelters registered"
               body="Municipality and admin accounts can register shelters with their capacity and contact." />
           ) : (
             <Table head={[{ label: "ID" }, { label: "Name" }, { label: "Location" },
               { label: "Capacity", num: true }, { label: "Occupied", num: true }, { label: "Free", num: true },
-              { label: "Contact" }]}>
+              { label: "Occupancy" }, { label: "Contact" }]}>
               {db.shelters.map((s) => {
                 const free = s.capacity - s.occupied;
                 return (
@@ -83,7 +98,8 @@ export default function Shelters() {
                     <Td num className={free === 0 ? "font-semibold text-st-bad" : "font-semibold"}>
                       {free === 0 ? "full" : free}
                     </Td>
-                    <Td className="font-mono">{s.contact}</Td>
+                    <Td><Meter value={s.occupied} max={s.capacity} /></Td>
+                    <Td className="font-mono text-[13px]">{s.contact}</Td>
                   </Row>
                 );
               })}

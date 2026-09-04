@@ -1,5 +1,9 @@
 import { motion, useReducedMotion } from "motion/react";
 
+/* Shared motion/feature primitives live in motion.jsx and are
+   re-exported here so views import everything from one module. */
+export { CountUp, Stagger, StaggerItem, LiveDot, Meter, ProgressSteps } from "./motion.jsx";
+
 /* ---------- status tag ----------
    Text always carries the state; the tint only supports it.
    One mapping used everywhere (color consistency lock). */

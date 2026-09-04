@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, ArrowsClockwise, Megaphone } from "@phosphor-icons/react";
 import { useApp } from "../context/AppContext.jsx";
-import { btn, Reveal } from "../components/ui.jsx";
+import { btn, Reveal, CountUp, Stagger, StaggerItem, LiveDot } from "../components/ui.jsx";
 
 const ROLES = [
   ["Admin", "Full control: shelters, stock, approvals, accounts and the summary report."],
@@ -24,11 +24,16 @@ const PERILS = [
   ["Forest fire", "Fire alerts with volunteer call-out and medical supply requests for nearby settlements."],
 ];
 
-function Figure({ label, value }) {
+function Figure({ label, value, live = false }) {
   return (
     <div className="flex items-baseline justify-between gap-4 border-b border-line py-3.5">
-      <dt className="text-sm text-ink-soft">{label}</dt>
-      <dd className="text-right font-mono text-[22px] leading-none font-medium tracking-tight">{value}</dd>
+      <dt className="flex items-center gap-2 text-sm text-ink-soft">
+        {live && <LiveDot />}
+        {label}
+      </dt>
+      <dd className="text-right font-mono text-[22px] leading-none font-medium tracking-tight">
+        <CountUp value={value} />
+      </dd>
     </div>
   );
 }
@@ -93,7 +98,7 @@ export default function Overview() {
             <div className="mb-6 aspect-16/10">{heroImg}</div>
           )}
           <dl className="border-t border-line-strong">
-            <Figure label="Active disasters" value={db.disasters.filter((d) => d.status !== "Resolved").length} />
+            <Figure label="Active disasters" value={db.disasters.filter((d) => d.status !== "Resolved").length} live />
             <Figure label="Open requests" value={openRequests} />
             <Figure label="Shelter space free" value={freeSpace} />
             <Figure label="Donations received" value={`Rs. ${totalMoney.toLocaleString()}`} />
@@ -105,14 +110,18 @@ export default function Overview() {
       <Reveal className="border-t border-line py-12">
         <div className="grid gap-10 lg:grid-cols-[1fr_2fr]">
           <h2 className="text-xl font-bold tracking-tight">Who uses it</h2>
-          <ul role="list">
-            {ROLES.map(([name, job]) => (
-              <li key={name} className="grid gap-1 border-b border-line py-3 last:border-b-0 sm:grid-cols-[160px_1fr] sm:gap-6">
-                <span className="text-sm font-semibold">{name}</span>
-                <span className="text-sm text-ink-soft">{job}</span>
-              </li>
-            ))}
-          </ul>
+          <Stagger>
+            <ul role="list">
+              {ROLES.map(([name, job]) => (
+                <StaggerItem key={name}>
+                  <div className="grid gap-1 border-b border-line py-3 sm:grid-cols-[160px_1fr] sm:gap-6">
+                    <span className="text-sm font-semibold">{name}</span>
+                    <span className="text-sm text-ink-soft">{job}</span>
+                  </div>
+                </StaggerItem>
+              ))}
+            </ul>
+          </Stagger>
         </div>
       </Reveal>
 

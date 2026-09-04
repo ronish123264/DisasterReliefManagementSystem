@@ -112,7 +112,7 @@ export function AppProvider({ children }) {
         ...prev,
         requests: prev.requests.map((r) => (r.id === id ? { ...r, status } : r)),
       }));
-      showToast(`Request ${id} ${status.toLowerCase()}`);
+      showToast(status === "Delivered" ? `Request ${id} delivered` : `Request ${id} ${status.toLowerCase()}`);
     },
     claimRequest(id) {
       setDb((prev) => ({
