@@ -3,127 +3,192 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Disaster Relief Management System - Nepal</title>
+  <title>DRMS - Disaster Relief Management System, Nepal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ===== NAVIGATION BAR ===== -->
-  <nav class="topnav">
-    <div class="nav-inner">
-      <a class="brand" onclick="showSection('home')">🆘 DRMS <span>Nepal</span></a>
-      <div class="nav-links" id="navLinks">
-        <a data-sec="home" onclick="showSection('home')">Home</a>
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="wordmark" onclick="showSection('home')">
+        <span class="wordmark-mark" aria-hidden="true"></span>
+        DRMS
+      </button>
+      <nav class="nav" id="navLinks" aria-label="Main">
+        <a data-sec="home" onclick="showSection('home')">Overview</a>
         <a data-sec="disasters" onclick="showSection('disasters')">Disasters</a>
         <a data-sec="shelters" onclick="showSection('shelters')">Shelters</a>
+        <a data-sec="requests" onclick="showSection('requests')">Requests</a>
         <a data-sec="volunteers" onclick="showSection('volunteers')">Volunteers</a>
         <a data-sec="resources" onclick="showSection('resources')">Resources</a>
-        <a data-sec="requests" onclick="showSection('requests')">Relief Requests</a>
-        <a data-sec="missing" onclick="showSection('missing')">Missing Persons</a>
+        <a data-sec="missing" onclick="showSection('missing')">Missing</a>
         <a data-sec="donations" onclick="showSection('donations')">Donations</a>
-      </div>
-      <div class="nav-user" id="navUser"></div>
+      </nav>
+      <div class="topbar-user" id="navUser"></div>
     </div>
-  </nav>
+  </header>
 
-  <main>
+  <main class="page">
 
-    <!-- ===== HOME ===== -->
+    <!-- ===== OVERVIEW ===== -->
     <section id="home" class="section">
-      <div class="hero">
-        <h1>Smart Disaster Relief<br>Management System</h1>
-        <p>
-          Nepal faces earthquakes, floods, landslides and forest fires every year.
-          During a disaster it is hard to know which areas are affected, which shelters
-          have space, what supplies are available and which volunteers can help.
-          This system brings all of that into one place.
-        </p>
-        <div class="hero-buttons">
-          <button class="btn btn-accent" onclick="showSection('disasters')">🚨 View Disasters</button>
-          <button class="btn btn-ghost-light" onclick="showSection('login')">Login / Register</button>
+
+      <div class="masthead">
+        <div class="masthead-grid">
+          <div>
+            <p class="masthead-kicker">Earthquake, flood, landslide and forest fire response across Nepal</p>
+            <h1 class="masthead-title">Know what is hit, what is held, and what is still needed.</h1>
+            <p class="masthead-body">
+              During a disaster the facts scatter faster than the paperwork. DRMS keeps
+              one record of affected areas, shelter capacity, supplies, volunteers,
+              relief requests and missing persons, shared between the municipality,
+              its volunteers and the public.
+            </p>
+            <div class="masthead-actions">
+              <button class="btn btn-solid" onclick="showSection('requests')">Open relief queue</button>
+              <button class="btn btn-line" onclick="showSection('login')">Login</button>
+            </div>
+          </div>
+          <dl class="figure-strip">
+            <div class="figure">
+              <dt>Active disasters</dt>
+              <dd class="figure-num" id="statDisasters">0</dd>
+            </div>
+            <div class="figure">
+              <dt>Open requests</dt>
+              <dd class="figure-num" id="statRequests">0</dd>
+            </div>
+            <div class="figure">
+              <dt>Shelter space free</dt>
+              <dd class="figure-num" id="statShelterSpace">0</dd>
+            </div>
+            <div class="figure">
+              <dt>Donations received</dt>
+              <dd class="figure-num" id="statDonations">Rs. 0</dd>
+            </div>
+          </dl>
         </div>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number" id="statDisasters">0</div>
-          <div class="stat-label">Disasters Reported</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="statRequests">0</div>
-          <div class="stat-label">Open Relief Requests</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="statShelterSpace">0</div>
-          <div class="stat-label">Free Shelter Space</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="statDonations">Rs. 0</div>
-          <div class="stat-label">Money Donated</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Disasters We Handle</h2>
-        <div class="type-grid">
-          <div class="type-card">
-            <div class="type-icon">🏠</div>
-            <h3>Earthquake</h3>
-            <p>Report damaged areas and find the nearest safe shelters.</p>
+      <div class="band">
+        <div class="band-grid">
+          <div class="band-col">
+            <h2>Who uses it</h2>
           </div>
-          <div class="type-card">
-            <div class="type-icon">🌊</div>
-            <h3>Flood</h3>
-            <p>Track flooded zones and coordinate boats, food and water.</p>
-          </div>
-          <div class="type-card">
-            <div class="type-icon">⛰️</div>
-            <h3>Landslide</h3>
-            <p>Block roads reported fast so relief can take other routes.</p>
-          </div>
-          <div class="type-card">
-            <div class="type-icon">🔥</div>
-            <h3>Forest Fire</h3>
-            <p>Alert volunteers and municipalities to respond quickly.</p>
+          <div class="band-col band-roles">
+            <div class="role-row">
+              <span class="role-name">Admin</span>
+              <span class="role-job">Full control: shelters, stock, approvals, accounts, summary report.</span>
+            </div>
+            <div class="role-row">
+              <span class="role-name">Municipality</span>
+              <span class="role-job">Owns disaster status, shelter intake and request approvals for its district.</span>
+            </div>
+            <div class="role-row">
+              <span class="role-name">Volunteer</span>
+              <span class="role-job">Claims pending requests, keeps availability current.</span>
+            </div>
+            <div class="role-row">
+              <span class="role-name">Citizen</span>
+              <span class="role-job">Reports disasters and missing persons, requests relief, donates.</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <h2>How It Works</h2>
-        <div class="steps">
-          <div class="step"><span class="step-num">1</span><b>Report</b><p>Citizens report disasters, missing persons and relief needs.</p></div>
-          <div class="step"><span class="step-num">2</span><b>Respond</b><p>Municipalities update shelters, resources and approve requests.</p></div>
-          <div class="step"><span class="step-num">3</span><b>Track</b><p>Volunteers claim requests and everyone sees live status.</p></div>
-          <div class="step"><span class="step-num">4</span><b>Recover</b><p>Donations are tracked until every request is delivered.</p></div>
+      <div class="band band-tint">
+        <div class="band-grid">
+          <div class="band-col">
+            <h2>Response cycle</h2>
+            <p class="band-note">The same record carries through all four stages, so nothing restarts at each handoff.</p>
+          </div>
+          <div class="band-col cycle">
+            <div class="cycle-item">
+              <span class="cycle-label">Report</span>
+              A citizen files the event, the missing person or the need. It enters the queue as <span class="tag">Pending</span>.
+            </div>
+            <div class="cycle-item">
+              <span class="cycle-label">Verify</span>
+              The municipality confirms it against ground reports and sets a status and severity.
+            </div>
+            <div class="cycle-item">
+              <span class="cycle-label">Deliver</span>
+              An approved request moves to a volunteer, who claims it and takes stock from a warehouse.
+            </div>
+            <div class="cycle-item">
+              <span class="cycle-label">Close</span>
+              Delivered and found are final states. Donations are drawn down against the closed total.
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="band">
+        <div class="band-grid">
+          <div class="band-col">
+            <h2>Peril types</h2>
+          </div>
+          <div class="band-col perils">
+            <div class="peril">
+              <h3>Earthquake</h3>
+              <p>Structural damage reports routed to the nearest assessed shelter; road blocks flagged on the disaster record.</p>
+            </div>
+            <div class="peril">
+              <h3>Flood</h3>
+              <p>Riverine and urban flood zones with water, food and boat requests tied to the affected wards.</p>
+            </div>
+            <div class="peril">
+              <h3>Landslide</h3>
+              <p>Route closures logged so relief movements can be re-planned around blocked corridors.</p>
+            </div>
+            <div class="peril">
+              <h3>Forest fire</h3>
+              <p>Fire alerts with volunteer call-out and medical supply requests for the surrounding settlements.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ===== DISASTERS ===== -->
     <section id="disasters" class="section hidden">
       <div class="page-head">
-        <h1>🚨 Disaster Reports</h1>
-        <p>All disasters reported across Nepal, newest at the bottom.</p>
+        <div>
+          <h1>Disaster reports</h1>
+          <p class="page-sub">Every event filed into the system, with its live status.</p>
+        </div>
       </div>
-      <div class="card">
-        <h2>Reported Disasters</h2>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Registered events</h2>
+          <p class="panel-meta" id="disastersCount"></p>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>ID</th><th>Type</th><th>Location</th><th>Severity</th><th>Date</th>
-                <th>Status</th><th>Reported By</th><th id="disasterActionHead" class="hidden">Update Status</th>
+                <th class="col-id">ID</th><th>Type</th><th>Location</th><th>Severity</th>
+                <th>Date</th><th>Status</th><th>Filed by</th><th id="disasterActionHead" class="col-action hidden">Set status</th>
               </tr>
             </thead>
             <tbody id="disastersBody"></tbody>
           </table>
         </div>
       </div>
-      <div class="card">
-        <h2>Report a New Disaster</h2>
-        <form id="formReportDisaster" class="form-grid hidden" onsubmit="reportDisaster(); return false;">
-          <label>Disaster Type
+
+      <div class="panel form-panel">
+        <div class="panel-head">
+          <h2>File a disaster report</h2>
+        </div>
+        <form id="formReportDisaster" class="fields hidden" onsubmit="reportDisaster(); return false;">
+          <div class="field">
+            <label for="disType">Disaster type</label>
             <select id="disType">
               <option>Earthquake</option>
               <option>Flood</option>
@@ -131,80 +196,106 @@
               <option>Forest Fire</option>
               <option>Other</option>
             </select>
-          </label>
-          <label>Severity
+          </div>
+          <div class="field">
+            <label for="disSeverity">Severity</label>
             <select id="disSeverity">
               <option>Low</option>
-              <option>Medium</option>
-              <option selected>High</option>
+              <option selected>Medium</option>
+              <option>High</option>
               <option>Critical</option>
             </select>
-          </label>
-          <label>Location (village / municipality / district)
-            <input type="text" id="disLocation" placeholder="example: Saptari" required>
-          </label>
-          <label>Short Description
-            <input type="text" id="disDescription" placeholder="example: Koshi river overflowed into villages" required>
-          </label>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-accent">Submit Disaster Report</button>
+          </div>
+          <div class="field">
+            <label for="disLocation">Location</label>
+            <input type="text" id="disLocation" placeholder="Village, municipality or district" required>
+          </div>
+          <div class="field field-wide">
+            <label for="disDescription">Short description</label>
+            <input type="text" id="disDescription" placeholder="What happened, and how bad" required>
+          </div>
+          <div class="field-actions">
+            <button type="submit" class="btn btn-solid">File report</button>
           </div>
         </form>
-        <p class="note" id="noteReportDisaster"></p>
+        <p class="gate" id="noteReportDisaster"></p>
       </div>
     </section>
 
     <!-- ===== SHELTERS ===== -->
     <section id="shelters" class="section hidden">
       <div class="page-head">
-        <h1>🏠 Shelter Management</h1>
-        <p>Shelters open right now and how much space each one has.</p>
+        <div>
+          <h1>Shelters</h1>
+          <p class="page-sub">Capacity, occupancy and free space for every registered shelter.</p>
+        </div>
       </div>
-      <div class="card">
-        <h2>All Shelters</h2>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>All shelters</h2>
+          <p class="panel-meta" id="sheltersMeta"></p>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>ID</th><th>Name</th><th>Location</th><th>Capacity</th><th>Occupied</th><th>Free Space</th><th>Contact</th></tr>
+              <tr>
+                <th class="col-id">ID</th><th>Name</th><th>Location</th>
+                <th class="num">Capacity</th><th class="num">Occupied</th><th class="num">Free</th><th>Contact</th>
+              </tr>
             </thead>
             <tbody id="sheltersBody"></tbody>
           </table>
         </div>
       </div>
-      <div class="card">
-        <h2>Add a Shelter</h2>
-        <form id="formAddShelter" class="form-grid hidden" onsubmit="addShelter(); return false;">
-          <label>Shelter Name
-            <input type="text" id="shName" placeholder="example: Bhaktapur College Shelter" required>
-          </label>
-          <label>Location
-            <input type="text" id="shLocation" placeholder="example: Bhaktapur" required>
-          </label>
-          <label>Capacity (people)
-            <input type="number" id="shCapacity" min="1" placeholder="200" required>
-          </label>
-          <label>Currently Occupied
+
+      <div class="panel form-panel">
+        <div class="panel-head">
+          <h2>Add a shelter</h2>
+        </div>
+        <form id="formAddShelter" class="fields hidden" onsubmit="addShelter(); return false;">
+          <div class="field">
+            <label for="shName">Shelter name</label>
+            <input type="text" id="shName" placeholder="School, community hall, campus" required>
+          </div>
+          <div class="field">
+            <label for="shLocation">Location</label>
+            <input type="text" id="shLocation" required>
+          </div>
+          <div class="field">
+            <label for="shCapacity">Capacity, people</label>
+            <input type="number" id="shCapacity" min="1" required>
+          </div>
+          <div class="field">
+            <label for="shOccupied">Currently occupied</label>
             <input type="number" id="shOccupied" min="0" value="0" required>
-          </label>
-          <label>Contact Phone
-            <input type="text" id="shContact" placeholder="98XXXXXXXX" required>
-          </label>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Add Shelter</button>
+          </div>
+          <div class="field">
+            <label for="shContact">Contact phone</label>
+            <input type="text" id="shContact" required>
+          </div>
+          <div class="field-actions">
+            <button type="submit" class="btn btn-solid">Add shelter</button>
           </div>
         </form>
-        <p class="note" id="noteAddShelter"></p>
+        <p class="gate" id="noteAddShelter"></p>
       </div>
     </section>
 
     <!-- ===== VOLUNTEERS ===== -->
     <section id="volunteers" class="section hidden">
       <div class="page-head">
-        <h1>🙋 Volunteer Registration</h1>
-        <p>Brave people ready to help during disasters.</p>
+        <div>
+          <h1>Volunteers</h1>
+          <p class="page-sub">Registered responders and what they can do.</p>
+        </div>
       </div>
-      <div class="card">
-        <h2>Registered Volunteers</h2>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Volunteer roster</h2>
+          <p class="panel-meta" id="volunteersMeta"></p>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -214,76 +305,102 @@
           </table>
         </div>
       </div>
-      <div class="card">
-        <h2>Become a Volunteer</h2>
-        <p>Register a free volunteer account with your skills. Municipalities can then
-           assign you to relief requests near you.</p>
-        <button class="btn btn-primary" onclick="goRegister('VOLUNTEER')">Register as Volunteer →</button>
+
+      <div class="panel">
+        <div class="cta-line">
+          <p>Responders register with their skills, then claim approved relief requests from the queue.</p>
+          <button class="btn btn-line" onclick="goRegister('VOLUNTEER')">Register as a volunteer</button>
+        </div>
       </div>
     </section>
 
     <!-- ===== RESOURCES ===== -->
     <section id="resources" class="section hidden">
       <div class="page-head">
-        <h1>📦 Resource Inventory</h1>
-        <p>Relief supplies currently available in warehouses.</p>
+        <div>
+          <h1>Resource inventory</h1>
+          <p class="page-sub">Relief stock held in warehouses and stores.</p>
+        </div>
       </div>
-      <div class="card">
-        <h2>Available Supplies</h2>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Stock on hand</h2>
+          <p class="panel-meta" id="resourcesMeta"></p>
+        </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>ID</th><th>Item</th><th>Quantity</th><th>Stored At</th></tr></thead>
+            <thead>
+              <tr><th class="col-id">ID</th><th>Item</th><th class="num">Quantity</th><th>Stored at</th></tr>
+            </thead>
             <tbody id="resourcesBody"></tbody>
           </table>
         </div>
       </div>
-      <div class="card">
-        <h2>Add a Resource</h2>
-        <form id="formAddResource" class="form-grid hidden" onsubmit="addResource(); return false;">
-          <label>Item Name
-            <input type="text" id="rsName" placeholder="example: Rice Bags" required>
-          </label>
-          <label>Quantity
-            <input type="number" id="rsQuantity" min="1" placeholder="120" required>
-          </label>
-          <label>Unit
-            <input type="text" id="rsUnit" placeholder="bags / bottles / kits" required>
-          </label>
-          <label>Stored At
-            <input type="text" id="rsLocation" placeholder="example: Central Warehouse, Kathmandu" required>
-          </label>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Add Resource</button>
+
+      <div class="panel form-panel">
+        <div class="panel-head">
+          <h2>Add a resource</h2>
+        </div>
+        <form id="formAddResource" class="fields hidden" onsubmit="addResource(); return false;">
+          <div class="field">
+            <label for="rsName">Item name</label>
+            <input type="text" id="rsName" placeholder="Rice bags, water, medicine kits" required>
+          </div>
+          <div class="field">
+            <label for="rsQuantity">Quantity</label>
+            <input type="number" id="rsQuantity" min="1" required>
+          </div>
+          <div class="field">
+            <label for="rsUnit">Unit</label>
+            <input type="text" id="rsUnit" placeholder="bags, bottles, kits, pieces" required>
+          </div>
+          <div class="field">
+            <label for="rsLocation">Stored at</label>
+            <input type="text" id="rsLocation" required>
+          </div>
+          <div class="field-actions">
+            <button type="submit" class="btn btn-solid">Add resource</button>
           </div>
         </form>
-        <p class="note" id="noteAddResource"></p>
+        <p class="gate" id="noteAddResource"></p>
       </div>
     </section>
 
     <!-- ===== RELIEF REQUESTS ===== -->
     <section id="requests" class="section hidden">
       <div class="page-head">
-        <h1>🍲 Relief Request Management</h1>
-        <p>Citizens ask for help, municipalities approve, volunteers deliver.</p>
+        <div>
+          <h1>Relief requests</h1>
+          <p class="page-sub">Needs filed by citizens, moved through approval to delivery.</p>
+        </div>
       </div>
-      <div class="card">
-        <h2>All Relief Requests</h2>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Queue</h2>
+          <p class="panel-meta" id="requestsMeta"></p>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>ID</th><th>Citizen</th><th>Location</th><th>Need</th><th>Qty</th>
-                <th>Status</th><th>Date</th><th>Volunteer</th><th>Actions</th>
+                <th class="col-id">ID</th><th>Filed by</th><th>Location</th><th>Need</th>
+                <th class="num">Qty</th><th>Status</th><th>Date</th><th>Volunteer</th><th class="col-action">Action</th>
               </tr>
             </thead>
             <tbody id="requestsBody"></tbody>
           </table>
         </div>
       </div>
-      <div class="card">
-        <h2>Request Relief</h2>
-        <form id="formRequestRelief" class="form-grid hidden" onsubmit="requestRelief(); return false;">
-          <label>What Do You Need?
+
+      <div class="panel form-panel">
+        <div class="panel-head">
+          <h2>Request relief</h2>
+        </div>
+        <form id="formRequestRelief" class="fields hidden" onsubmit="requestRelief(); return false;">
+          <div class="field">
+            <label for="rqNeed">What is needed</label>
             <select id="rqNeed">
               <option>Food</option>
               <option>Drinking Water</option>
@@ -291,186 +408,226 @@
               <option>Clothes</option>
               <option>Other</option>
             </select>
-          </label>
-          <label>How Many People / Units
-            <input type="number" id="rqQuantity" min="1" placeholder="10" required>
-          </label>
-          <label>Delivery Location
-            <input type="text" id="rqLocation" placeholder="example: Ward 5, Bhaktapur" required>
-          </label>
-          <label>Contact Number
-            <input type="text" id="rqContact" placeholder="98XXXXXXXX" required>
-          </label>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-accent">Submit Relief Request</button>
+          </div>
+          <div class="field">
+            <label for="rqQuantity">How many people or units</label>
+            <input type="number" id="rqQuantity" min="1" required>
+          </div>
+          <div class="field">
+            <label for="rqLocation">Delivery location</label>
+            <input type="text" id="rqLocation" required>
+          </div>
+          <div class="field">
+            <label for="rqContact">Contact number</label>
+            <input type="text" id="rqContact" required>
+          </div>
+          <div class="field-actions">
+            <button type="submit" class="btn btn-solid">Submit request</button>
           </div>
         </form>
-        <p class="note" id="noteRequestRelief"></p>
+        <p class="gate" id="noteRequestRelief"></p>
       </div>
     </section>
 
     <!-- ===== MISSING PERSONS ===== -->
     <section id="missing" class="section hidden">
       <div class="page-head">
-        <h1>🔍 Missing Person Records</h1>
-        <p>Report and search for people missing during a disaster.</p>
+        <div>
+          <h1>Missing persons</h1>
+          <p class="page-sub">Reports filed during the response, and their outcome.</p>
+        </div>
       </div>
-      <div class="card">
-        <h2>All Missing Person Reports</h2>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>All reports</h2>
+          <p class="panel-meta" id="missingMeta"></p>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>ID</th><th>Name</th><th>Age</th><th>Last Seen At</th>
-                <th>Status</th><th>Contact</th><th>Date</th><th>Actions</th>
+                <th class="col-id">ID</th><th>Name</th><th class="num">Age</th><th>Last seen at</th>
+                <th>Status</th><th>Contact</th><th>Filed</th><th class="col-action">Action</th>
               </tr>
             </thead>
             <tbody id="missingBody"></tbody>
           </table>
         </div>
       </div>
-      <div class="card">
-        <h2>Report a Missing Person</h2>
-        <form id="formReportMissing" class="form-grid hidden" onsubmit="reportMissing(); return false;">
-          <label>Missing Person's Full Name
-            <input type="text" id="mpName" placeholder="example: Hari Karki" required>
-          </label>
-          <label>Age
-            <input type="number" id="mpAge" min="0" max="120" placeholder="34" required>
-          </label>
-          <label>Last Seen At
-            <input type="text" id="mpLastSeen" placeholder="example: Saptari weekly market" required>
-          </label>
-          <label>Your Contact Number
-            <input type="text" id="mpContact" placeholder="98XXXXXXXX" required>
-          </label>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-accent">File Missing Person Report</button>
+
+      <div class="panel form-panel">
+        <div class="panel-head">
+          <h2>File a missing person report</h2>
+        </div>
+        <form id="formReportMissing" class="fields hidden" onsubmit="reportMissing(); return false;">
+          <div class="field">
+            <label for="mpName">Full name</label>
+            <input type="text" id="mpName" required>
+          </div>
+          <div class="field">
+            <label for="mpAge">Age</label>
+            <input type="number" id="mpAge" min="0" max="120" required>
+          </div>
+          <div class="field">
+            <label for="mpLastSeen">Where last seen</label>
+            <input type="text" id="mpLastSeen" required>
+          </div>
+          <div class="field">
+            <label for="mpContact">Your contact number</label>
+            <input type="text" id="mpContact" required>
+          </div>
+          <div class="field-actions">
+            <button type="submit" class="btn btn-solid">File report</button>
           </div>
         </form>
-        <p class="note" id="noteReportMissing"></p>
+        <p class="gate" id="noteReportMissing"></p>
       </div>
     </section>
 
     <!-- ===== DONATIONS ===== -->
     <section id="donations" class="section hidden">
       <div class="page-head">
-        <h1>💝 Donation Tracking</h1>
-        <p>Every donation received, tracked openly.</p>
+        <div>
+          <h1>Donations</h1>
+          <p class="page-sub">Money and supplies received, tracked to the record.</p>
+        </div>
       </div>
-      <div class="card">
-        <h2>All Donations</h2>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Received</h2>
+          <p class="panel-meta" id="donationsMeta"></p>
+        </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>ID</th><th>Donor</th><th>Type</th><th>Item</th><th>Amount (Rs.)</th><th>Date</th></tr></thead>
+            <thead>
+              <tr><th class="col-id">ID</th><th>Donor</th><th>Type</th><th>Item</th><th class="num">Amount</th><th>Date</th></tr>
+            </thead>
             <tbody id="donationsBody"></tbody>
           </table>
         </div>
       </div>
-      <div class="card">
-        <h2>Make a Donation</h2>
-        <form id="formDonate" class="form-grid hidden" onsubmit="donate(); return false;">
+
+      <div class="panel form-panel">
+        <div class="panel-head">
+          <h2>Make a donation</h2>
+        </div>
+        <form id="formDonate" class="fields hidden" onsubmit="donate(); return false;">
           <p class="donating-as" id="donateAs"></p>
-          <label>Donation Type
+          <div class="field">
+            <label for="dnType">Donation type</label>
             <select id="dnType" onchange="toggleDonateFields()">
               <option value="Money">Money</option>
               <option value="Supplies">Supplies</option>
             </select>
-          </label>
-          <label id="dnAmountLabel">Amount (Rs.)
-            <input type="number" id="dnAmount" min="1" placeholder="5000" required>
-          </label>
-          <label id="dnItemLabel" class="hidden">What are you donating?
-            <input type="text" id="dnItem" placeholder="example: 20 blankets">
-          </label>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-accent">Donate</button>
+          </div>
+          <div class="field" id="dnAmountField">
+            <label for="dnAmount">Amount, rupees</label>
+            <input type="number" id="dnAmount" min="1" required>
+          </div>
+          <div class="field hidden" id="dnItemField">
+            <label for="dnItem">What are you donating</label>
+            <input type="text" id="dnItem" placeholder="For example: 20 blankets">
+          </div>
+          <div class="field-actions">
+            <button type="submit" class="btn btn-solid">Donate</button>
           </div>
         </form>
-        <p class="note" id="noteDonate"></p>
+        <p class="gate" id="noteDonate"></p>
       </div>
     </section>
 
     <!-- ===== LOGIN / REGISTER ===== -->
     <section id="login" class="section hidden">
       <div class="page-head">
-        <h1>🔐 Login / Register</h1>
-        <p>Login to report, request and manage relief work.</p>
+        <div>
+          <h1>Access</h1>
+          <p class="page-sub">Login or register to file reports and move work through the queue.</p>
+        </div>
       </div>
 
-      <div id="loggedInPanel" class="card hidden">
-        <h2>You are logged in 👍</h2>
-        <p id="loggedInAs"></p>
-        <button class="btn btn-ghost" onclick="logout()">Logout</button>
+      <div id="loggedInPanel" class="panel hidden">
+        <div class="cta-line">
+          <p id="loggedInAs"></p>
+          <button class="btn btn-line" onclick="logout()">Log out</button>
+        </div>
       </div>
 
-      <div class="login-grid" id="loginPanel">
-        <div class="card">
-          <h2>Login</h2>
-          <form onsubmit="login(); return false;">
-            <label>Username
+      <div class="two-col" id="loginPanel">
+        <div class="panel form-panel">
+          <div class="panel-head"><h2>Login</h2></div>
+          <form class="fields" onsubmit="login(); return false;">
+            <div class="field">
+              <label for="loginUsername">Username</label>
               <input type="text" id="loginUsername" required>
-            </label>
-            <label>Password
+            </div>
+            <div class="field">
+              <label for="loginPassword">Password</label>
               <input type="password" id="loginPassword" required>
-            </label>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+            <div class="field-actions">
+              <button type="submit" class="btn btn-solid">Login</button>
             </div>
             <p class="error-msg" id="loginMsg"></p>
           </form>
         </div>
 
-        <div class="card">
-          <h2>Register New Account</h2>
-          <form onsubmit="registerUser(); return false;">
-            <label>I am a
+        <div class="panel form-panel">
+          <div class="panel-head"><h2>Create an account</h2></div>
+          <form class="fields" onsubmit="registerUser(); return false;">
+            <div class="field">
+              <label for="regRole">Account type</label>
               <select id="regRole" onchange="toggleRegFields()">
                 <option value="CITIZEN">Citizen</option>
                 <option value="VOLUNTEER">Volunteer</option>
               </select>
-            </label>
-            <label>Full Name
-              <input type="text" id="regFullName" placeholder="example: Sita Sharma" required>
-            </label>
-            <div id="regAddressWrap">
-              <label>Address
-                <input type="text" id="regAddress" placeholder="example: Bhaktapur">
-              </label>
             </div>
-            <div id="regSkillsWrap" class="hidden">
-              <label>Your Skills
-                <input type="text" id="regSkills" placeholder="example: First Aid, Driving">
-              </label>
+            <div class="field">
+              <label for="regFullName">Full name</label>
+              <input type="text" id="regFullName" required>
             </div>
-            <label>Phone Number
-              <input type="text" id="regPhone" placeholder="98XXXXXXXX" required>
-            </label>
-            <label>Username
+            <div class="field" id="regAddressWrap">
+              <label for="regAddress">Address</label>
+              <input type="text" id="regAddress">
+            </div>
+            <div class="field hidden" id="regSkillsWrap">
+              <label for="regSkills">Skills</label>
+              <input type="text" id="regSkills" placeholder="First aid, driving, cooking">
+            </div>
+            <div class="field">
+              <label for="regPhone">Phone</label>
+              <input type="text" id="regPhone" required>
+            </div>
+            <div class="field">
+              <label for="regUsername">Username</label>
               <input type="text" id="regUsername" required>
-            </label>
-            <label>Password
+            </div>
+            <div class="field">
+              <label for="regPassword">Password</label>
               <input type="password" id="regPassword" required>
-            </label>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Create Account</button>
+            </div>
+            <div class="field-actions">
+              <button type="submit" class="btn btn-solid">Create account</button>
             </div>
             <p class="error-msg" id="regMsg"></p>
           </form>
         </div>
       </div>
 
-      <div class="card demo-box">
-        <h2>Demo Accounts</h2>
-        <p>You can also try the system with these ready-made accounts:</p>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Demo accounts</h2>
+          <p class="panel-meta">Seeded on first run. Use any of these to see the role menus.</p>
+        </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Role</th><th>Username</th><th>Password</th><th>Can Do</th></tr></thead>
+            <thead><tr><th>Role</th><th>Username</th><th>Password</th><th>Scope</th></tr></thead>
             <tbody>
-              <tr><td>Admin</td><td>admin</td><td>admin123</td><td>Manage everything, see summary</td></tr>
-              <tr><td>Municipality</td><td>municipality</td><td>muni123</td><td>Shelters, resources, approve requests</td></tr>
-              <tr><td>Volunteer</td><td>ramvol</td><td>ram123</td><td>Claim relief requests</td></tr>
-              <tr><td>Citizen</td><td>sita</td><td>sita123</td><td>Report, request relief, donate</td></tr>
+              <tr><td>Admin</td><td class="mono">admin</td><td class="mono">admin123</td><td>Everything, plus summary report</td></tr>
+              <tr><td>Municipality</td><td class="mono">municipality</td><td class="mono">muni123</td><td>Shelters, stock, approvals, status</td></tr>
+              <tr><td>Volunteer</td><td class="mono">ramvol</td><td class="mono">ram123</td><td>Claim requests, set availability</td></tr>
+              <tr><td>Citizen</td><td class="mono">sita</td><td class="mono">sita123</td><td>Reports, requests, donations</td></tr>
             </tbody>
           </table>
         </div>
@@ -480,11 +637,10 @@
   </main>
 
   <footer class="footer">
-    <p><b>Smart Disaster Relief Management System</b> — a Java + Web project for Nepal disaster relief.</p>
-    <p>The console application stores data in text files; this website stores data in your browser.</p>
+    <p><span class="wordmark-mark" aria-hidden="true"></span> DRMS, Nepal disaster relief. Console build stores data in text files; this site stores data in the browser.</p>
   </footer>
 
-  <div id="toast"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
   <script src="script.js"></script>
 </body>
 </html>

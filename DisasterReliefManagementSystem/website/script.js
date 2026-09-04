@@ -1,17 +1,16 @@
 // ============================================================
-// SMART DISASTER RELIEF MANAGEMENT SYSTEM - WEBSITE
-// Beginner-level JavaScript.
-// All data is saved inside the browser using localStorage,
-// the same way the Java console app saves to text files.
+// DRMS website logic.
+// Beginner-level JavaScript: plain functions, one global db
+// object, everything persisted with localStorage.
 // ============================================================
 
-var DB_KEY = "drms_db";      // all records
-var SESSION_KEY = "drms_session"; // logged in username
+var DB_KEY = "drms_db";           // all records
+var SESSION_KEY = "drms_session"; // logged-in username
 
 var db = {};
 var currentUser = null;
 
-// ================= SAMPLE DATA (FIRST VISIT ONLY) =================
+// ---------- sample data, used only on the very first visit ----------
 
 function defaultData() {
   var t = today();
@@ -19,12 +18,12 @@ function defaultData() {
     users: [
       { id: 1, role: "ADMIN", username: "admin", password: "admin123", fullName: "System Admin", phone: "9800000001", district: "", skills: "", availability: "Available", address: "" },
       { id: 2, role: "MUNICIPALITY", username: "municipality", password: "muni123", fullName: "Kathmandu Municipality", phone: "9800000002", district: "Kathmandu", skills: "", availability: "Available", address: "" },
-      { id: 3, role: "VOLUNTEER", username: "ramvol", password: "ram123", fullName: "Ram Bahadur", phone: "9800000003", district: "", skills: "First Aid, Rescue Driving", availability: "Available", address: "" },
+      { id: 3, role: "VOLUNTEER", username: "ramvol", password: "ram123", fullName: "Ram Bahadur", phone: "9800000003", district: "", skills: "First aid, rescue driving", availability: "Available", address: "" },
       { id: 4, role: "CITIZEN", username: "sita", password: "sita123", fullName: "Sita Sharma", phone: "9800000004", district: "", skills: "", availability: "Available", address: "Bhaktapur" }
     ],
     disasters: [
       { id: 1, type: "Flood", location: "Saptari", severity: "High", date: t, description: "Koshi river overflowed into nearby villages.", status: "Ongoing", reportedBy: "Sita Sharma" },
-      { id: 2, type: "Earthquake", location: "Kathmandu", severity: "Medium", date: t, description: "Minor quake damaged some old houses in the old bazaar.", status: "Resolved", reportedBy: "Kathmandu Municipality" }
+      { id: 2, type: "Earthquake", location: "Kathmandu", severity: "Medium", date: t, description: "Minor tremor, some old houses damaged in the old bazaar.", status: "Resolved", reportedBy: "Kathmandu Municipality" }
     ],
     shelters: [
       { id: 1, name: "Bhaktapur College Shelter", location: "Bhaktapur", capacity: 200, occupied: 85, contact: "9801000001" },
@@ -32,10 +31,10 @@ function defaultData() {
       { id: 3, name: "Kathmandu Public School", location: "Kathmandu", capacity: 300, occupied: 40, contact: "9801000003" }
     ],
     resources: [
-      { id: 1, name: "Rice Bags", quantity: 120, unit: "bags", location: "Central Warehouse, Kathmandu" },
-      { id: 2, name: "Drinking Water", quantity: 300, unit: "bottles", location: "Central Warehouse, Kathmandu" },
-      { id: 3, name: "First Aid Kits", quantity: 45, unit: "kits", location: "Bir Hospital Store" },
-      { id: 4, name: "Blankets", quantity: 80, unit: "pieces", location: "Central Warehouse, Kathmandu" }
+      { id: 1, name: "Rice bags", quantity: 120, unit: "bags", location: "Central warehouse, Kathmandu" },
+      { id: 2, name: "Drinking water", quantity: 300, unit: "bottles", location: "Central warehouse, Kathmandu" },
+      { id: 3, name: "First aid kits", quantity: 45, unit: "kits", location: "Bir Hospital store" },
+      { id: 4, name: "Blankets", quantity: 80, unit: "pieces", location: "Central warehouse, Kathmandu" }
     ],
     requests: [
       { id: 1, citizenName: "Ram Bahadur", contact: "9800000003", location: "Saptari", needType: "Drinking Water", quantity: 20, status: "Pending", date: t, volunteer: "" },
@@ -51,7 +50,7 @@ function defaultData() {
   };
 }
 
-// ================= STORAGE HELPERS =================
+// ---------- storage ----------
 
 function loadDB() {
   var raw = localStorage.getItem(DB_KEY);
@@ -61,7 +60,6 @@ function loadDB() {
     db = defaultData();
     saveDB();
   }
-  // keep the user logged in after refreshing the page
   var sessionName = localStorage.getItem(SESSION_KEY);
   if (sessionName) {
     currentUser = findUser(sessionName);
@@ -81,7 +79,6 @@ function findUser(username) {
   return null;
 }
 
-// next free ID for a list of records
 function nextId(list) {
   var max = 0;
   for (var i = 0; i < list.length; i++) {
@@ -101,7 +98,7 @@ function today() {
   return d.getFullYear() + "-" + mm + "-" + dd;
 }
 
-// stop user-typed text from breaking the HTML tables
+// keep typed text from breaking the tables
 function esc(text) {
   return String(text)
     .replace(/&/g, "&amp;")
@@ -109,12 +106,17 @@ function esc(text) {
     .replace(/>/g, "&gt;");
 }
 
-function statusBadge(status) {
+// status tag: color carries the state, the word carries the meaning
+function tag(status) {
   var cls = status.toLowerCase().replace(" ", "-");
-  return '<span class="badge badge-' + cls + '">' + esc(status) + '</span>';
+  return '<span class="tag tag-' + cls + '">' + esc(status) + "</span>";
 }
 
-// ================= ROLE HELPERS =================
+function idCell(id) {
+  return '<td class="col-id"><span class="rec-id">' + id + "</span></td>";
+}
+
+// ---------- role helpers ----------
 
 function isStaff() {
   return currentUser !== null &&
@@ -129,7 +131,7 @@ function isVolunteer() {
   return currentUser !== null && currentUser.role === "VOLUNTEER";
 }
 
-// ================= NAVIGATION =================
+// ---------- navigation ----------
 
 function showSection(id) {
   var sections = document.querySelectorAll(".section");
@@ -155,7 +157,7 @@ function goRegister(role) {
   showSection("login");
 }
 
-// ================= LOGIN / REGISTER =================
+// ---------- login / register ----------
 
 function login() {
   var username = document.getElementById("loginUsername").value.trim();
@@ -174,7 +176,7 @@ function login() {
   document.getElementById("loginPassword").value = "";
   updateAuthUI();
   renderAll();
-  showMsg("Welcome, " + user.fullName + "!");
+  showMsg("Logged in as " + user.fullName);
   showSection("home");
 }
 
@@ -183,7 +185,7 @@ function logout() {
   localStorage.removeItem(SESSION_KEY);
   updateAuthUI();
   renderAll();
-  showMsg("You are logged out.");
+  showMsg("Logged out");
   showSection("home");
 }
 
@@ -196,7 +198,7 @@ function registerUser() {
   var phone = document.getElementById("regPhone").value.trim();
 
   if (username === "" || password === "" || fullName === "") {
-    msg.textContent = "Please fill every required field.";
+    msg.textContent = "Fill in every required field.";
     return;
   }
   if (findUser(username) !== null) {
@@ -230,11 +232,11 @@ function registerUser() {
   localStorage.setItem(SESSION_KEY, newUser.username);
   updateAuthUI();
   renderAll();
-  showMsg("Account created. Welcome, " + fullName + "!");
+  showMsg("Account created. Welcome, " + fullName);
   showSection("home");
 }
 
-// show skills box only for volunteers, address box only for citizens
+// skills box only for volunteers, address box only for citizens
 function toggleRegFields() {
   var role = document.getElementById("regRole").value;
   if (role === "VOLUNTEER") {
@@ -246,35 +248,42 @@ function toggleRegFields() {
   }
 }
 
-// show amount box for money, item box for supplies
+// amount box for money, item box for supplies
 function toggleDonateFields() {
   var type = document.getElementById("dnType").value;
+  var amount = document.getElementById("dnAmountField");
+  var item = document.getElementById("dnItemField");
+  var amountInput = document.getElementById("dnAmount");
+  var itemInput = document.getElementById("dnItem");
   if (type === "Money") {
-    document.getElementById("dnAmountLabel").classList.remove("hidden");
-    document.getElementById("dnItemLabel").classList.add("hidden");
+    amount.classList.remove("hidden");
+    item.classList.add("hidden");
+    amountInput.required = true;
+    itemInput.required = false;
   } else {
-    document.getElementById("dnAmountLabel").classList.add("hidden");
-    document.getElementById("dnItemLabel").classList.remove("hidden");
+    amount.classList.add("hidden");
+    item.classList.remove("hidden");
+    amountInput.required = false;
+    itemInput.required = true;
   }
 }
 
-// ================= ROLE-BASED FORM VISIBILITY =================
+// ---------- role-based visibility of forms and actions ----------
 
 function updateAuthUI() {
   var navUser = document.getElementById("navUser");
   if (currentUser) {
     navUser.innerHTML =
-      '<span class="user-chip">' + esc(currentUser.fullName) + ' (' + currentUser.role + ')</span>' +
-      '<button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>';
+      '<span class="user-chip"><b>' + esc(currentUser.fullName) + "</b> (" + currentUser.role + ")</span>" +
+      '<button class="btn btn-line btn-sm" onclick="logout()">Log out</button>';
   } else {
-    navUser.innerHTML = '<button class="btn btn-accent btn-sm" onclick="showSection(\'login\')">Login / Register</button>';
+    navUser.innerHTML = '<button class="btn btn-solid btn-sm" onclick="showSection(\'login\')">Log in</button>';
   }
 
-  var guestText = "Please login to use this form. Demo citizen account: sita / sita123.";
-  var staffText = "Only ADMIN and MUNICIPALITY accounts can use this form.";
-  var citizenText = "Only CITIZEN accounts can use this form. Demo citizen: sita / sita123.";
+  var guestText = "Log in to use this form. Demo citizen account: sita / sita123.";
+  var staffText = "This form is for Admin and Municipality accounts.";
+  var citizenText = "This form is for Citizen accounts. Demo citizen: sita / sita123.";
 
-  // citizen-only forms
   var citizenForms = [
     ["formReportDisaster", "noteReportDisaster"],
     ["formRequestRelief", "noteRequestRelief"],
@@ -293,7 +302,6 @@ function updateAuthUI() {
     }
   }
 
-  // staff-only forms
   var staffForms = [
     ["formAddShelter", "noteAddShelter"],
     ["formAddResource", "noteAddResource"]
@@ -310,18 +318,16 @@ function updateAuthUI() {
     }
   }
 
-  // login / register panels
   if (currentUser) {
     document.getElementById("loginPanel").classList.add("hidden");
     document.getElementById("loggedInPanel").classList.remove("hidden");
     document.getElementById("loggedInAs").textContent =
-      "You are logged in as " + currentUser.fullName + " (" + currentUser.role + ").";
+      "Logged in as " + currentUser.fullName + " (" + currentUser.role + ").";
   } else {
     document.getElementById("loginPanel").classList.remove("hidden");
     document.getElementById("loggedInPanel").classList.add("hidden");
   }
 
-  // update-status column only for staff
   var actionHead = document.getElementById("disasterActionHead");
   if (isStaff()) {
     actionHead.classList.remove("hidden");
@@ -330,7 +336,7 @@ function updateAuthUI() {
   }
 }
 
-// ================= RENDERING =================
+// ---------- rendering ----------
 
 function renderAll() {
   renderStats();
@@ -368,30 +374,37 @@ function renderStats() {
 function renderDisasters() {
   var body = document.getElementById("disastersBody");
   var rows = "";
-  var colCount = isStaff() ? 9 : 8; // staff see one extra "update status" column
+  var colCount = isStaff() ? 8 : 7;
   for (var i = 0; i < db.disasters.length; i++) {
     var d = db.disasters[i];
     var actionCell = "";
     if (isStaff()) {
-      actionCell = '<td><select class="mini-select" onchange="updateDisasterStatus(' + d.id + ', this.value)">' +
+      actionCell = '<td class="action-cell"><select class="mini-select" onchange="updateDisasterStatus(' + d.id + ', this.value)">' +
         statusOption("Reported", d.status) + statusOption("Ongoing", d.status) +
-        statusOption("Resolved", d.status) + '</select></td>';
+        statusOption("Resolved", d.status) + "</select></td>";
     }
-    rows += "<tr>" +
-      "<td>" + d.id + "</td>" +
+    rows += "<tr>" + idCell(d.id) +
       "<td>" + esc(d.type) + "</td>" +
       "<td>" + esc(d.location) + "</td>" +
-      "<td>" + statusBadge(d.severity) + "</td>" +
-      "<td>" + esc(d.date) + "</td>" +
-      "<td>" + statusBadge(d.status) + "</td>" +
+      "<td>" + tag(d.severity) + "</td>" +
+      '<td class="mono">' + esc(d.date) + "</td>" +
+      "<td>" + tag(d.status) + "</td>" +
       "<td>" + esc(d.reportedBy) + "</td>" +
       actionCell + "</tr>";
-    rows += '<tr class="desc-row"><td colspan="' + colCount + '">' + esc(d.description) + "</td></tr>";
+    rows += '<tr class="desc-row"><td colspan="' + colCount + '" class="desc">' + esc(d.description) + "</td></tr>";
   }
   if (db.disasters.length === 0) {
-    rows = '<tr><td colspan="' + colCount + '" class="empty">No disasters reported yet.</td></tr>';
+    rows = '<tr><td colspan="' + colCount + '" class="empty-cell">No disasters on record.</td></tr>';
   }
   body.innerHTML = rows;
+  setText("disastersCount", db.disasters.length + " events");
+}
+
+function setText(id, text) {
+  var el = document.getElementById(id);
+  if (el) {
+    el.textContent = text;
+  }
 }
 
 function statusOption(value, current) {
@@ -402,44 +415,57 @@ function statusOption(value, current) {
 function renderShelters() {
   var body = document.getElementById("sheltersBody");
   var rows = "";
+  var totalFree = 0;
+  var fullCount = 0;
   for (var i = 0; i < db.shelters.length; i++) {
     var s = db.shelters[i];
     var free = s.capacity - s.occupied;
-    var cls = (free === 0) ? ' class="row-full"' : "";
-    rows += "<tr" + cls + ">" +
-      "<td>" + s.id + "</td>" +
+    totalFree = totalFree + free;
+    if (free === 0) {
+      fullCount++;
+    }
+    rows += "<tr>" + idCell(s.id) +
       "<td>" + esc(s.name) + "</td>" +
       "<td>" + esc(s.location) + "</td>" +
-      "<td>" + s.capacity + "</td>" +
-      "<td>" + s.occupied + "</td>" +
-      "<td>" + (free > 0 ? '<b class="good">' + free + "</b>" : '<b class="bad">FULL</b>') + "</td>" +
-      "<td>" + esc(s.contact) + "</td></tr>";
+      '<td class="num mono">' + s.capacity + "</td>" +
+      '<td class="num mono">' + s.occupied + "</td>" +
+      '<td class="num mono">' + (free === 0 ? "full" : free) + "</td>" +
+      '<td class="mono">' + esc(s.contact) + "</td></tr>";
   }
   if (db.shelters.length === 0) {
-    rows = '<tr><td colspan="7" class="empty">No shelters registered yet.</td></tr>';
+    rows = '<tr><td colspan="7" class="empty-cell">No shelters registered.</td></tr>';
   }
   body.innerHTML = rows;
+  setText("sheltersMeta", db.shelters.length + " shelters · " + totalFree +
+    " places free" + (fullCount > 0 ? ", " + fullCount + " at capacity" : ""));
 }
 
 function renderVolunteers() {
   var body = document.getElementById("volunteersBody");
   var rows = "";
+  var available = 0;
+  var total = 0;
   for (var i = 0; i < db.users.length; i++) {
     var u = db.users[i];
     if (u.role !== "VOLUNTEER") {
       continue;
     }
+    total++;
+    if (u.availability === "Available") {
+      available++;
+    }
     rows += "<tr>" +
       "<td>" + esc(u.fullName) + "</td>" +
-      "<td>" + esc(u.username) + "</td>" +
+      '<td class="mono">' + esc(u.username) + "</td>" +
       "<td>" + esc(u.skills) + "</td>" +
-      "<td>" + esc(u.phone) + "</td>" +
-      "<td>" + statusBadge(u.availability) + "</td></tr>";
+      '<td class="mono">' + esc(u.phone) + "</td>" +
+      "<td>" + tag(u.availability) + "</td></tr>";
   }
   if (rows === "") {
-    rows = '<tr><td colspan="5" class="empty">No volunteers registered yet.</td></tr>';
+    rows = '<tr><td colspan="5" class="empty-cell">No volunteers registered yet.</td></tr>';
   }
   body.innerHTML = rows;
+  setText("volunteersMeta", total + " registered · " + available + " available");
 }
 
 function renderResources() {
@@ -447,71 +473,83 @@ function renderResources() {
   var rows = "";
   for (var i = 0; i < db.resources.length; i++) {
     var r = db.resources[i];
-    rows += "<tr>" +
-      "<td>" + r.id + "</td>" +
+    rows += "<tr>" + idCell(r.id) +
       "<td>" + esc(r.name) + "</td>" +
-      "<td><b>" + r.quantity + "</b> " + esc(r.unit) + "</td>" +
+      '<td class="num mono">' + r.quantity + " " + esc(r.unit) + "</td>" +
       "<td>" + esc(r.location) + "</td></tr>";
   }
   if (db.resources.length === 0) {
-    rows = '<tr><td colspan="4" class="empty">No resources recorded yet.</td></tr>';
+    rows = '<tr><td colspan="4" class="empty-cell">No resources recorded.</td></tr>';
   }
   body.innerHTML = rows;
+  setText("resourcesMeta", db.resources.length + " line items");
 }
 
 function renderRequests() {
   var body = document.getElementById("requestsBody");
   var rows = "";
+  var pending = 0;
+  var approved = 0;
   for (var i = 0; i < db.requests.length; i++) {
     var r = db.requests[i];
-    var volunteer = r.volunteer === "" ? "-" : esc(r.volunteer);
-    var actions = '<span class="muted">—</span>';
-    if (isStaff() && r.status === "Pending") {
-      actions = '<button class="btn btn-success btn-sm" onclick="approveRequest(' + r.id + ')">Approve</button> ' +
-        '<button class="btn btn-danger btn-sm" onclick="rejectRequest(' + r.id + ')">Reject</button>';
-    } else if (isVolunteer() && r.status === "Pending" && r.volunteer === "") {
-      actions = '<button class="btn btn-primary btn-sm" onclick="claimRequest(' + r.id + ')">Claim</button>';
+    if (r.status === "Pending") {
+      pending++;
+    } else if (r.status === "Approved") {
+      approved++;
     }
-    rows += "<tr>" +
-      "<td>" + r.id + "</td>" +
+    var volunteer = r.volunteer === "" ? "-" : esc(r.volunteer);
+    var actions = '<span class="no-action">-</span>';
+    if (isStaff() && r.status === "Pending") {
+      actions = '<button class="btn btn-ink btn-sm" onclick="approveRequest(' + r.id + ')">Approve</button>' +
+        '<button class="btn btn-line btn-sm" onclick="rejectRequest(' + r.id + ')">Reject</button>';
+    } else if (isVolunteer() && r.status === "Pending" && r.volunteer === "") {
+      actions = '<button class="btn btn-solid btn-sm" onclick="claimRequest(' + r.id + ')">Claim</button>';
+    }
+    rows += "<tr>" + idCell(r.id) +
       "<td>" + esc(r.citizenName) + "</td>" +
       "<td>" + esc(r.location) + "</td>" +
       "<td>" + esc(r.needType) + "</td>" +
-      "<td>" + r.quantity + "</td>" +
-      "<td>" + statusBadge(r.status) + "</td>" +
-      "<td>" + esc(r.date) + "</td>" +
+      '<td class="num mono">' + r.quantity + "</td>" +
+      "<td>" + tag(r.status) + "</td>" +
+      '<td class="mono">' + esc(r.date) + "</td>" +
       "<td>" + volunteer + "</td>" +
-      "<td class='action-cell'>" + actions + "</td></tr>";
+      '<td class="action-cell">' + actions + "</td></tr>";
   }
   if (db.requests.length === 0) {
-    rows = '<tr><td colspan="9" class="empty">No relief requests yet.</td></tr>';
+    rows = '<tr><td colspan="9" class="empty-cell">No relief requests yet.</td></tr>';
   }
   body.innerHTML = rows;
+  setText("requestsMeta", db.requests.length + " total · " + pending +
+    " pending · " + approved + " approved");
 }
 
 function renderMissing() {
   var body = document.getElementById("missingBody");
   var rows = "";
+  var stillMissing = 0;
   for (var i = 0; i < db.missing.length; i++) {
     var m = db.missing[i];
-    var actions = '<span class="muted">—</span>';
-    if (isStaff() && m.status === "Missing") {
-      actions = '<button class="btn btn-success btn-sm" onclick="markFound(' + m.id + ')">Mark Found</button>';
+    if (m.status === "Missing") {
+      stillMissing++;
     }
-    rows += "<tr>" +
-      "<td>" + m.id + "</td>" +
+    var actions = '<span class="no-action">-</span>';
+    if (isStaff() && m.status === "Missing") {
+      actions = '<button class="btn btn-ink btn-sm" onclick="markFound(' + m.id + ')">Mark found</button>';
+    }
+    rows += "<tr>" + idCell(m.id) +
       "<td>" + esc(m.name) + "</td>" +
-      "<td>" + m.age + "</td>" +
+      '<td class="num mono">' + m.age + "</td>" +
       "<td>" + esc(m.lastSeen) + "</td>" +
-      "<td>" + statusBadge(m.status) + "</td>" +
-      "<td>" + esc(m.contact) + "</td>" +
-      "<td>" + esc(m.date) + "</td>" +
-      "<td class='action-cell'>" + actions + "</td></tr>";
+      "<td>" + tag(m.status) + "</td>" +
+      '<td class="mono">' + esc(m.contact) + "</td>" +
+      '<td class="mono">' + esc(m.date) + "</td>" +
+      '<td class="action-cell">' + actions + "</td></tr>";
   }
   if (db.missing.length === 0) {
-    rows = '<tr><td colspan="8" class="empty">No missing person reports yet.</td></tr>';
+    rows = '<tr><td colspan="8" class="empty-cell">No missing person reports.</td></tr>';
   }
   body.innerHTML = rows;
+  setText("missingMeta", db.missing.length + " reports · " + stillMissing + " still missing");
 }
 
 function renderDonations() {
@@ -521,29 +559,28 @@ function renderDonations() {
   for (var i = 0; i < db.donations.length; i++) {
     var d = db.donations[i];
     totalMoney = totalMoney + d.amount;
-    rows += "<tr>" +
-      "<td>" + d.id + "</td>" +
+    rows += "<tr>" + idCell(d.id) +
       "<td>" + esc(d.donorName) + "</td>" +
-      "<td>" + statusBadge(d.type === "Money" ? "Money" : "Supplies") + "</td>" +
+      "<td>" + tag(d.type) + "</td>" +
       "<td>" + esc(d.itemName) + "</td>" +
-      "<td>" + (d.amount > 0 ? "Rs. " + d.amount.toLocaleString() : "—") + "</td>" +
-      "<td>" + esc(d.date) + "</td></tr>";
+      '<td class="num mono">' + (d.amount > 0 ? "Rs. " + d.amount.toLocaleString() : "-") + "</td>" +
+      '<td class="mono">' + esc(d.date) + "</td></tr>";
   }
   if (db.donations.length === 0) {
-    rows = '<tr><td colspan="6" class="empty">No donations received yet.</td></tr>';
-  } else {
-    rows += '<tr class="total-row"><td colspan="4"><b>Total money donated</b></td><td colspan="2"><b>Rs. ' +
-      totalMoney.toLocaleString() + "</b></td></tr>";
+    rows = '<tr><td colspan="6" class="empty-cell">No donations received.</td></tr>';
   }
   body.innerHTML = rows;
+  setText("donationsMeta", db.donations.length + " records · Rs. " + totalMoney.toLocaleString() + " in money");
 
   var donateAs = document.getElementById("donateAs");
   if (currentUser) {
-    donateAs.textContent = "Donating as: " + currentUser.fullName;
+    donateAs.textContent = "Donating as " + currentUser.fullName;
+  } else {
+    donateAs.textContent = "";
   }
 }
 
-// ================= FORM ACTIONS =================
+// ---------- form actions ----------
 
 function reportDisaster() {
   db.disasters.push({
@@ -559,7 +596,7 @@ function reportDisaster() {
   saveDB();
   document.getElementById("formReportDisaster").reset();
   renderAll();
-  showMsg("Disaster report submitted. Thank you!");
+  showMsg("Disaster report filed");
 }
 
 function addShelter() {
@@ -582,7 +619,7 @@ function addShelter() {
   saveDB();
   document.getElementById("formAddShelter").reset();
   renderAll();
-  showMsg("Shelter added.");
+  showMsg("Shelter added");
 }
 
 function addResource() {
@@ -596,7 +633,7 @@ function addResource() {
   saveDB();
   document.getElementById("formAddResource").reset();
   renderAll();
-  showMsg("Resource added to inventory.");
+  showMsg("Resource added to inventory");
 }
 
 function requestRelief() {
@@ -614,7 +651,7 @@ function requestRelief() {
   saveDB();
   document.getElementById("formRequestRelief").reset();
   renderAll();
-  showMsg("Relief request submitted. Status: Pending.");
+  showMsg("Relief request submitted, status Pending");
 }
 
 function reportMissing() {
@@ -631,7 +668,7 @@ function reportMissing() {
   saveDB();
   document.getElementById("formReportMissing").reset();
   renderAll();
-  showMsg("Missing person report filed.");
+  showMsg("Missing person report filed");
 }
 
 function donate() {
@@ -655,10 +692,10 @@ function donate() {
   document.getElementById("formDonate").reset();
   toggleDonateFields();
   renderAll();
-  showMsg("Thank you for your donation!");
+  showMsg("Donation recorded, thank you");
 }
 
-// ================= STAFF / VOLUNTEER ACTIONS =================
+// ---------- staff / volunteer actions ----------
 
 function updateDisasterStatus(id, newStatus) {
   for (var i = 0; i < db.disasters.length; i++) {
@@ -668,7 +705,7 @@ function updateDisasterStatus(id, newStatus) {
   }
   saveDB();
   renderAll();
-  showMsg("Disaster #" + id + " status updated to " + newStatus + ".");
+  showMsg("Disaster " + id + " set to " + newStatus);
 }
 
 function approveRequest(id) {
@@ -687,7 +724,7 @@ function setStatusOfRequest(id, status) {
   }
   saveDB();
   renderAll();
-  showMsg("Request #" + id + " " + status.toLowerCase() + ".");
+  showMsg("Request " + id + " " + status.toLowerCase());
 }
 
 function claimRequest(id) {
@@ -698,7 +735,7 @@ function claimRequest(id) {
   }
   saveDB();
   renderAll();
-  showMsg("You claimed request #" + id + ". Thank you!");
+  showMsg("You claimed request " + id);
 }
 
 function markFound(id) {
@@ -709,10 +746,10 @@ function markFound(id) {
   }
   saveDB();
   renderAll();
-  showMsg("Good news! Person #" + id + " marked as found.");
+  showMsg("Person " + id + " marked as found");
 }
 
-// ================= SMALL MESSAGE TOAST =================
+// ---------- toast ----------
 
 var toastTimer = null;
 function showMsg(text) {
@@ -724,10 +761,10 @@ function showMsg(text) {
   }
   toastTimer = setTimeout(function () {
     toast.classList.remove("show");
-  }, 3000);
+  }, 2600);
 }
 
-// ================= START THE APP =================
+// ---------- boot ----------
 
 loadDB();
 toggleRegFields();
