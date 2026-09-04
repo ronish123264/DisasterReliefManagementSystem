@@ -66,7 +66,68 @@ java -cp bin Main
 
 New citizens and volunteers can also register from the main menu (option 2).
 
-### File handling details
+### Menus by role (console app)
+
+You see these menus **after choosing option 1 (Login)** on the main menu:
+
+**ADMIN MENU** — after login as `admin`
+```
+1. View Disasters            8. Approve / Reject Relief Request
+2. Update Disaster Status    9. View Missing Persons
+3. View Shelters            10. Mark Missing Person as Found
+4. Add Shelter              11. View Volunteers
+5. View Resources           12. View Donations
+6. Add Resource             13. Create Municipality Account
+7. View Relief Requests     14. Summary Report
+0. Logout
+```
+
+**MUNICIPALITY MENU** — after login as `municipality`
+```
+1. View Disasters            7. View Relief Requests
+2. Update Disaster Status    8. Approve / Reject Relief Request
+3. View Shelters             9. View Missing Persons
+4. Add Shelter              10. Mark Missing Person as Found
+5. View Resources           11. Summary Report
+6. Add Resource              0. Logout
+```
+
+**VOLUNTEER MENU** — after login as `ramvol`
+```
+1. View Disasters            4. Claim a Relief Request
+2. View Shelters             5. Update My Availability
+3. View Relief Requests      6. View Missing Persons
+0. Logout
+```
+
+**CITIZEN MENU** — after login as `sita` (or a newly registered citizen)
+```
+1. Report a Disaster         5. View My Relief Requests
+2. View Disasters            6. Report a Missing Person
+3. View Shelters             7. View Missing Persons
+4. Request Relief            8. Make a Donation
+0. Logout
+```
+
+### Where are the role menus on the website?
+
+The website has **one shared navbar** (Disasters, Shelters, Volunteers, Resources,
+Relief Requests, Missing Persons, Donations). The role menus appear **inside each page
+after you login**, as extra buttons and forms:
+
+| Logged in as | What appears that others don't see |
+|--------------|-------------------------------------|
+| **Admin / Municipality** | "Add a Shelter" form, "Add a Resource" form, Approve / Reject buttons on Pending requests, Mark Found buttons, "Update Status" dropdown on each disaster |
+| **Volunteer** | "Claim" button on Pending relief requests with no volunteer |
+| **Citizen** | "Report a Disaster", "Request Relief", "Report a Missing Person" and "Make a Donation" forms |
+| **Nobody (guest)** | Read-only tables + the login/register page |
+
+When you login, a green toast message confirms who you are, and your name + role is
+shown as a chip on the top-right of the navbar.
+
+---
+
+## File handling details
 
 All data lives in the `data/` folder, one text file per record type:
 
