@@ -1,0 +1,52 @@
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+@import "tailwindcss";
+
+/* ============================================================
+   DRMS design tokens (Tailwind v4 @theme)
+   Direction: trust-first operations console, one accent
+   (Nepal crimson), zinc-paper neutrals, hairline structure.
+   Shape lock: rounded-md (6px) for panels/buttons/inputs,
+   rounded (4px) for status tags. No other radii.
+   ============================================================ */
+
+@theme {
+  --font-sans: "Geist Variable", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", "Cascadia Mono", Consolas, monospace;
+
+  --color-paper: #f6f6f4;
+  --color-surface: #fcfcfa;
+  --color-surface-2: #efefec;
+  --color-ink: #1b1d1f;
+  --color-ink-soft: #4d5256;
+  --color-muted: #74797d;
+  --color-line: #e2e2de;
+  --color-line-strong: #c9c9c4;
+  --color-accent: #a4222d;
+  --color-accent-deep: #8a1c26;
+  --color-accent-tint: #f5e7e8;
+
+  --color-st-warn: #7d5a00;
+  --color-st-warn-bg: #f6efdd;
+  --color-st-ok: #2c6e3d;
+  --color-st-ok-bg: #e7f0e9;
+  --color-st-info: #2f5d8a;
+  --color-st-info-bg: #e8eef4;
+  --color-st-bad: #a4222d;
+  --color-st-bad-bg: #f5e7e8;
+  --color-st-neutral: #5c6165;
+  --color-st-neutral-bg: #ececeb;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent-tint);
+  color: var(--color-accent-deep);
+}
